@@ -2,6 +2,7 @@ import sys
 import pygame
 
 from settings import Settings
+from ship import Ship
 
 class AlienInvasion:
     """Classe geral para gerenciar ativos e comportamento do jogo"""
@@ -10,10 +11,10 @@ class AlienInvasion:
         """Inicializa o jogo e cria recursos do jogo"""
         pygame.init()
         self.clock = pygame.time.Clock()
-        self.settings = Settings
+        self.settings = Settings()
 
         self.screen = pygame.display.set_mode(
-            (self.settings.screen_with,
+            (self.settings.screen_width,
              self.settings.screen_height)
         )
         """
@@ -22,6 +23,8 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
         self.bg_color = (230, 230, 230)
         """
+        self.ship = Ship(self)
+        
     def run_game(self):
         """Inicia o loop principal do jogo"""
         while True:
@@ -29,11 +32,14 @@ class AlienInvasion:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
-                    
-            self.screen.fill(self.settings.bg_color)       
+
+            self.screen.fill(self.settings.bg_color) 
+            self.ship.blitme()
+    
             # Deixa a tela desenhada o mais recente visível
             pygame.display.flip()
             self.clock.tick(60)
+
 if __name__ == '__main__':
     ai = AlienInvasion()
     ai.run_game()
