@@ -11,7 +11,11 @@ class Ship:
         self.image = pygame.image.load('images/ship.bmp')
         self.rect = self.image.get_rect()
         self.rect.midbottom = self.screen_rect.midbottom
-
+        self.moving_right = False
+    def upadte(self):
+        """Atualiza a posição da espaçonova com base an flag"""
+        if self.moving_right:
+         self.rect.x+=1     
     def blitme(self):
         '''Desenha a espaçonave em sua localização atual'''
         self.screen.blit(self.image, self.rect)

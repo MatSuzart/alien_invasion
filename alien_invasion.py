@@ -28,18 +28,28 @@ class AlienInvasion:
     def run_game(self):
         """Inicia o loop principal do jogo"""
         while True:
+            self._chech_events()
+            self.ship.update()
+            self._update_screen()
+            self.clock.tick(60) 
             # Observa eventos de teclado e mouse
-            for event in pygame.event.get():
+    def _check_events(self):
+        for event in pygame.event.get():
+                """Respondendo as teclas pressionadas e a eventos de mouse"""   
                 if event.type == pygame.QUIT:
                     sys.exit()
-
-            self.screen.fill(self.settings.bg_color) 
-            self.ship.blitme()
-    
-            # Deixa a tela desenhada o mais recente visível
-            pygame.display.flip()
-            self.clock.tick(60)
-
+                elif event.type==pygame.KEYDOWN:
+                    if event.key == pygame.K_RIGHT:
+                        #Move a espaçonave para a direita
+                      self.ship.moving_right = True
+                elif event.type == pygame.KEYUP:
+                    if event.key == pygame.K_RIGHT:
+                        self.ship.moving_right = False  
+    def _update_screen(self):
+        self.screen.fill(self.settings.bg_color) 
+        self.ship.blitme()
+        # Deixa a tela desenhada o mais recente visível
+        pygame.display.flip()              
 if __name__ == '__main__':
     ai = AlienInvasion()
     ai.run_game()
