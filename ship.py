@@ -14,8 +14,13 @@ class Ship:
         self.moving_right = False
     def upadte(self):
         """Atualiza a posição da espaçonova com base an flag"""
-        if self.moving_right:
-         self.rect.x+=1     
+        if self.moving_right and self.rect.right< self.screen_react.tight:
+         self.screen_rect.right
+         self.x += self.settings.ship_speed
+        if self.moving_left and self.rect.left>0:
+           self.x-= self.settings.ship_speed
+        #Atualiza o objeto react a partir de self.x
+        self.rect.x = self.x 
     def blitme(self):
         '''Desenha a espaçonave em sua localização atual'''
         self.screen.blit(self.image, self.rect)
