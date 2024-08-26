@@ -30,10 +30,14 @@ class AlienInvasion:
         while True:
             self._check_events()
             self.ship.update()
+            #Descarta os projétis que desaparecem
+            for bullet in self.bullets.copy():
+                if bullet.rect.bottom <=0:
+                    self.bullets.remove(bullet)
+            print(len(self.bullets)) 
             self._update_screen()
-            self.clock.tick(60) 
+            self.clock.tick(60)    
             # Observa eventos de teclado e mouse
-    
     def _check_events(self):
         for event in pygame.event.get():
             """Respondendo as teclas pressionadas e a eventos de mouse"""   
