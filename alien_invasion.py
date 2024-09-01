@@ -35,6 +35,7 @@ class AlienInvasion:
         while True:
             self._check_events()
             self.ship.update()
+            self._update_bullets()
             #Descarta os projétis que desaparecem
             for bullet in self.bullets.copy():
                 if bullet.rect.bottom <=0:
@@ -59,7 +60,16 @@ class AlienInvasion:
             self.ship.moving_left = True   
         elif event.key == pygame.K_q:
             sys.exit()
-
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()    
+    
+    def _fire_bullet(self):
+        '''Criar um novo projétil e o adiciona ao grupo projétis'''
+        if len (self.bullets) < self.settings.bullets_allowed:
+        new_bullet = Bullet(self)
+        self.bullets.add(new_bullet)
+    def _update_bullets(self):
+        '''Atualiza a posição dos projéteis e descarta os projéteis antigos'''
     def _check_keyup_events(self, event):
         '''Responde a teclas soltas'''
         if event.key == pygame.K_RIGHT:
@@ -69,6 +79,8 @@ class AlienInvasion:
                
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color) 
+        for bullet in self.bullets.sprintes():
+            bullet.draw_bullet()
         self.ship.blitme()
         # Deixa a tela desenhada o mais recente visível
         pygame.display.flip()  
