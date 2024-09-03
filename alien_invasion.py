@@ -3,6 +3,8 @@ import pygame
 
 from settings import Settings
 from ship import Ship
+from bullet import Bullet
+from alien import Alien
 
 class AlienInvasion:
     """Classe geral para gerenciar ativos e comportamento do jogo"""
@@ -24,12 +26,34 @@ class AlienInvasion:
         self.bg_color = (230, 230, 230)
         """
         self.ship = Ship(self)
+        self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+
+        self._create_fleet()
         self.settings = Settings()
 
         self.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)    
         self.settings.screen_width = self.screen.get_react().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
+    def _create_fleet(self):
+        '''Criada a frota de alienígenas'''
+        #Cria um alienígena
+        alien = Alien(self)
+        alien_with = alien.rect.width
+
+        current_x = alien_with
+        while current_x <(self.settings.screen_width - 2* alien_with):
+            self._create_alien(current_x)
+            current_x += 2* alien_with
+    def _creat_alien(self,x_position):
+        '''Cria um alienígena e o posiciona na fileira'''
+        new_alien = Alien(self)
+        new_alien.x = x_position
+        new_alien.rect.x = x_position
+        self.aliens.add(new_alien)
+        current_x +=2* alien_with
+        self.aliens.add(alien)
     def run_game(self):
         """Inicia o loop principal do jogo"""
         while True:
@@ -66,8 +90,8 @@ class AlienInvasion:
     def _fire_bullet(self):
         '''Criar um novo projétil e o adiciona ao grupo projétis'''
         if len (self.bullets) < self.settings.bullets_allowed:
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
     def _update_bullets(self):
         '''Atualiza a posição dos projéteis e descarta os projéteis antigos'''
     def _check_keyup_events(self, event):
@@ -82,6 +106,7 @@ class AlienInvasion:
         for bullet in self.bullets.sprintes():
             bullet.draw_bullet()
         self.ship.blitme()
+        self.aliens.draw(self.screen)
         # Deixa a tela desenhada o mais recente visível
         pygame.display.flip()  
 
