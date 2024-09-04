@@ -40,17 +40,21 @@ class AlienInvasion:
         '''Criada a frota de alienígenas'''
         #Cria um alienígena
         alien = Alien(self)
-        alien_with = alien.rect.width
+        alien_with, alein_height = alien.rect.size
 
-        current_x = alien_with
-        while current_x <(self.settings.screen_width - 2* alien_with):
-            self._create_alien(current_x)
+        current_x,current_y = alien_with,alein_height
+        while current_y <(self.settings.screen_height -2 * alein_height):
+         while current_x <(self.settings.screen_width - 2* alien_with):
+            self._create_alien(current_x,current_y)
+            current_x = alien_with
+            current_x += 2* alein_height
             current_x += 2* alien_with
-    def _creat_alien(self,x_position):
+    def _creat_alien(self,x_position,y_position):
         '''Cria um alienígena e o posiciona na fileira'''
         new_alien = Alien(self)
         new_alien.x = x_position
         new_alien.rect.x = x_position
+        new_alien.rect.y = y_position
         self.aliens.add(new_alien)
         current_x +=2* alien_with
         self.aliens.add(alien)
@@ -60,6 +64,8 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self._update_bullets()
+            self._update_screen()
+            
             #Descarta os projétis que desaparecem
             for bullet in self.bullets.copy():
                 if bullet.rect.bottom <=0:
