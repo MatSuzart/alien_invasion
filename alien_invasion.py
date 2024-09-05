@@ -65,7 +65,7 @@ class AlienInvasion:
             self.ship.update()
             self._update_bullets()
             self._update_screen()
-            
+
             #Descarta os projétis que desaparecem
             for bullet in self.bullets.copy():
                 if bullet.rect.bottom <=0:
@@ -100,13 +100,42 @@ class AlienInvasion:
             self.bullets.add(new_bullet)
     def _update_bullets(self):
         '''Atualiza a posição dos projéteis e descarta os projéteis antigos'''
+        #Verifica se algum projétil atingiu um alienígena
+        #Se sim, descarta o projétil e o alienígena
+        collisions = pygame.sprite.groupcollide(
+            self.bullets,self.aliens,True,True)
+        if not self.aliens:
+            #Destrói os projéteis existentes e cria uma forta nova
+            self.bullets.empty()
+            self._create_fleet()
+        
     def _check_keyup_events(self, event):
         '''Responde a teclas soltas'''
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False    
-               
+    def _check_fleet_edges(self):
+        '''Responde apropriadamente se algum alienígena alcançou uma borda'''
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+    def _change_fleet_direction(self):
+        ''''Faz toda a forta descer e mudar de direção'''
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1     
+    def _update_aliens(self):
+        '''Verifica se a forta está na borda e, sem seguida atualiza as posições'''
+        self._check_fleet_edges()
+        self.aliens.update()   
+        self._check_bullet_alien_collisions()
+        if pygame.sprite.spritecollideany(self.ship,self.aliens):
+            print("Ship hit!!!")
+    def _check_bullet_alien_collisions(self):
+        '''Responde á colisões alienígenas'''
+        # Remove todos os prjéteis e os alienígenas que tenham colidido    
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color) 
         for bullet in self.bullets.sprintes():
