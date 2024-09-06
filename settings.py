@@ -10,6 +10,7 @@ class Settings:
 
         #configuração da espaçonave
         self.ship_speed = 1.5
+        self.ship_limit = 3
         #Configurações do projétil
         self.bullet_speed = 2.5
         self.bullet_with = 3

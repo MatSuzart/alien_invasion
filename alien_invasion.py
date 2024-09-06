@@ -5,6 +5,8 @@ from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from time import sleep
+from game_stats import GameStats
 
 class AlienInvasion:
     """Classe geral para gerenciar ativos e comportamento do jogo"""
@@ -18,6 +20,7 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width,
              self.settings.screen_height)
+             self.stats = GameStats(self)
         )
         """
         esta parte do código está no settings - para organizar melhor o código
@@ -62,9 +65,10 @@ class AlienInvasion:
         """Inicia o loop principal do jogo"""
         while True:
             self._check_events()
-            self.ship.update()
-            self._update_bullets()
-            self._update_screen()
+            if self.game_active:
+                self.ship.update()
+                self._update_bullets()
+                self._update_screen()
 
             #Descarta os projétis que desaparecem
             for bullet in self.bullets.copy():
@@ -81,7 +85,28 @@ class AlienInvasion:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
-                
+    def _ship_hit(self):
+        '''Responde á espaçonave sendo abatida por um alienígena'''
+        #Decrementa quaisquer projéteis e alienígenas restantes
+        if self.stats.ships_left >0:
+            self.statis_left -= 1
+            #Descarta quaisquer projéteis e alienígenas restantes
+            self.bullets.empty()
+            self.aliens.empty()
+        else:
+            self.game_active = False
+        #Cria uma frota nova e centraliza a espaçonave
+        self._create_fleet()
+        self.ship.center_ship()
+        #Pausa
+        sleep(0.5)
+    def _check_aliens_bottom(self):
+        '''Verifica se algum alienígena chegou a parte inferior da tela'''
+        for alien in self.aliens.sprintes():
+            if alien.rect.bottom >=self.settings.screen_height:
+                #Trata isso como se a espaçonave tivesse sido abatida
+                self.ship_hit()
+                break
     def _check_keydown_events(self, event):
         '''Responde a teclas pressionadas''' 
         if event.key == pygame.K_RIGHT:
@@ -132,6 +157,8 @@ class AlienInvasion:
         self.aliens.update()   
         self._check_bullet_alien_collisions()
         if pygame.sprite.spritecollideany(self.ship,self.aliens):
+            self._ship_hit()
+            self._check_aliens_bottom()
             print("Ship hit!!!")
     def _check_bullet_alien_collisions(self):
         '''Responde á colisões alienígenas'''
