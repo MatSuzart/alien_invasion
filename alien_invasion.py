@@ -7,6 +7,7 @@ from bullet import Bullet
 from alien import Alien
 from time import sleep
 from game_stats import GameStats
+from button import Button
 
 class AlienInvasion:
     """Classe geral para gerenciar ativos e comportamento do jogo"""
@@ -38,6 +39,9 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)    
         self.settings.screen_width = self.screen.get_react().width
         self.settings.screen_height = self.screen.get_rect().height
+        self.game_active = False
+        #Cria botão Play
+        self.play_button = Button(self, "Play")
         pygame.display.set_caption("Alien Invasion")
     def _create_fleet(self):
         '''Criada a frota de alienígenas'''
@@ -95,6 +99,7 @@ class AlienInvasion:
             self.aliens.empty()
         else:
             self.game_active = False
+            pygame.mouse.set_visible(True)
         #Cria uma frota nova e centraliza a espaçonave
         self._create_fleet()
         self.ship.center_ship()
@@ -117,7 +122,20 @@ class AlienInvasion:
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()    
-    
+    def _check_play_button(self,mouse_pos):
+        ''''Inicia um jogo novo quando o jogador clica em Play'''
+        if self.play_button.rect.collidepoint(mouse_pos):
+            self.stats.rect_stats()
+            
+            self.game_active = True
+            #Descarta quaiquer projéteis e alienígenas restantes
+            self.bullets.empty()
+            self.aliens.empty()
+            
+            #Cria uma frota nova e centraliza a espaçonave
+            self._create_fleet()
+            self.ship.center_ship()
+            pygame.mouse.set_visible(False)
     def _fire_bullet(self):
         '''Criar um novo projétil e o adiciona ao grupo projétis'''
         if len (self.bullets) < self.settings.bullets_allowed:
@@ -170,6 +188,8 @@ class AlienInvasion:
         self.ship.blitme()
         self.aliens.draw(self.screen)
         # Deixa a tela desenhada o mais recente visível
+        if not self.game_active:
+            self.play_button.draw_button()
         pygame.display.flip()  
 
 if __name__ == '__main__':
