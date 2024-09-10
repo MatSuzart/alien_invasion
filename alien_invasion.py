@@ -126,7 +126,7 @@ class AlienInvasion:
         ''''Inicia um jogo novo quando o jogador clica em Play'''
         if self.play_button.rect.collidepoint(mouse_pos):
             self.stats.rect_stats()
-            
+            self.settings.initialize_dynamic_settings()
             self.game_active = True
             #Descarta quaiquer projéteis e alienígenas restantes
             self.bullets.empty()
@@ -181,6 +181,13 @@ class AlienInvasion:
     def _check_bullet_alien_collisions(self):
         '''Responde á colisões alienígenas'''
         # Remove todos os prjéteis e os alienígenas que tenham colidido    
+        if not self.aliens:
+            #Destrói os projéteis existentes e cria uma frota nova
+
+            self.bullets.empty()
+            self.create_fleet()
+            self.settings.increase_speed()
+
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color) 
         for bullet in self.bullets.sprintes():
