@@ -40,6 +40,7 @@ class AlienInvasion:
         self.settings.screen_width = self.screen.get_react().width
         self.settings.screen_height = self.screen.get_rect().height
         self.game_active = False
+        self.sb = Scoreboard(self)
         #Cria botão Play
         self.play_button = Button(self, "Play")
         pygame.display.set_caption("Alien Invasion")
@@ -131,7 +132,7 @@ class AlienInvasion:
             #Descarta quaiquer projéteis e alienígenas restantes
             self.bullets.empty()
             self.aliens.empty()
-            
+            self.sb.prep.score()
             #Cria uma frota nova e centraliza a espaçonave
             self._create_fleet()
             self.ship.center_ship()
@@ -178,6 +179,11 @@ class AlienInvasion:
             self._ship_hit()
             self._check_aliens_bottom()
             print("Ship hit!!!")
+        if collisions:
+            for aliens in collision.values():
+                self.stats.score +=self.settings.alien_points * len(aliens)
+            self.stats.score += self.settings.alien_points
+            self.sb.prep_score()    
     def _check_bullet_alien_collisions(self):
         '''Responde á colisões alienígenas'''
         # Remove todos os prjéteis e os alienígenas que tenham colidido    
@@ -193,6 +199,7 @@ class AlienInvasion:
         for bullet in self.bullets.sprintes():
             bullet.draw_bullet()
         self.ship.blitme()
+        self.sb.shoe_score()
         self.aliens.draw(self.screen)
         # Deixa a tela desenhada o mais recente visível
         if not self.game_active:
