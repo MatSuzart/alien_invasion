@@ -178,12 +178,7 @@ class AlienInvasion:
         if pygame.sprite.spritecollideany(self.ship,self.aliens):
             self._ship_hit()
             self._check_aliens_bottom()
-            print("Ship hit!!!")
-        if collisions:
-            for aliens in collision.values():
-                self.stats.score +=self.settings.alien_points * len(aliens)
-            self.stats.score += self.settings.alien_points
-            self.sb.prep_score()    
+            print("Ship hit!!!")   
     def _check_bullet_alien_collisions(self):
         '''Responde á colisões alienígenas'''
         # Remove todos os prjéteis e os alienígenas que tenham colidido    
@@ -193,6 +188,13 @@ class AlienInvasion:
             self.bullets.empty()
             self.create_fleet()
             self.settings.increase_speed()
+
+        if collisions:
+            for aliens in collision.values():
+                self.stats.score +=self.settings.alien_points * len(aliens)
+                self.stats.score += self.settings.alien_points
+                self.sb.prep_score() 
+                self.sb.check_high_score()
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color) 
