@@ -10,6 +10,8 @@ class Settings:
 
         #configuração da espaçonave
         self.ship_speed = 1.5
+        '''Aumenta configurações de velocidade e valores dos pontso alienígenas'''
+
         self.ship_limit = 3
         #Configurações do projétil
         self.bullet_speed = 2.5
@@ -18,6 +20,7 @@ class Settings:
         self.bullet_color = (60,60,60)
         self.bullets_allowed = 3
         self.alien_speed = 1.0
+        self.alien_point = int(self.alien_point * self.score_scale)
         self.fleet_drop_speed = 10
         self.fleet_direction = 1
         self.speedup_scale = 1.1
@@ -38,3 +41,4 @@ class Settings:
         self.ship_speed *= self.speed_slace
         self.bullet_speed *=self.speedup_scale
         self.alien_speed *= self.speedup_scale
+        print(self.alien_points)
