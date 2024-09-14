@@ -131,6 +131,7 @@ class AlienInvasion:
             self.game_active = True
             #Descarta quaiquer projéteis e alienígenas restantes
             self.bullets.empty()
+            self.sb.prep_level()
             self.aliens.empty()
             self.sb.prep.score()
             #Cria uma frota nova e centraliza a espaçonave
@@ -188,6 +189,10 @@ class AlienInvasion:
             self.bullets.empty()
             self.create_fleet()
             self.settings.increase_speed()
+
+            #Aumenta o nível
+            self.stats.level += 1
+            self.sb.prep_level()
 
         if collisions:
             for aliens in collision.values():

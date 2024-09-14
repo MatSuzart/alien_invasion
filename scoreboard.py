@@ -1,4 +1,6 @@
 import pygame.font
+from pygame.sprite import Group
+from ship import Ship
 
 class Scoreboard:
     '''Classe para exibir informações de pontuação'''
@@ -9,6 +11,7 @@ class Scoreboard:
         self.screen_rect = self.screen.get_rect()
         self.setttings = ai_game.settings
         self.stats = ai_game.stats
+        self.ai_game = ai_game
 
         #Configurações de fonte para informações de pontuação
         self.text_color(30,30,30)
@@ -16,7 +19,7 @@ class Scoreboard:
 
         #Prepara a imagem inicial da pontuação
         self.prep_score()
-
+        self.prep_ships()
     def prep_score(self):
         '''Transforma a pontução em uma imagem renderizada'''
         score_str= str(self.stats.score)
