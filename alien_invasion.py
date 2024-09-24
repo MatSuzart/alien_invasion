@@ -96,6 +96,7 @@ class AlienInvasion:
         if self.stats.ships_left >0:
             self.statis_left -= 1
             #Descarta quaisquer projéteis e alienígenas restantes
+            self.sb.prep_ships()
             self.bullets.empty()
             self.aliens.empty()
         else:
@@ -132,6 +133,7 @@ class AlienInvasion:
             #Descarta quaiquer projéteis e alienígenas restantes
             self.bullets.empty()
             self.sb.prep_level()
+            self.sb.prep_ships()
             self.aliens.empty()
             self.sb.prep.score()
             #Cria uma frota nova e centraliza a espaçonave

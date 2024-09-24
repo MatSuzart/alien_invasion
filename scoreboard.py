@@ -20,6 +20,16 @@ class Scoreboard:
         #Prepara a imagem inicial da pontuação
         self.prep_score()
         self.prep_ships()
+    
+    def prep_ships(self):
+        '''Mostra as espaçonaves restantes'''
+        self.ships = Group()
+        for ship_number in range(self.stats.ships_left):
+            ship = Ship(self.ai_game)
+            ship.rect.x = 10 + ship_number * ship.rect.width
+            ship.rect.y = 10
+            self.ships.add(ship)
+
     def prep_score(self):
         '''Transforma a pontução em uma imagem renderizada'''
         score_str= str(self.stats.score)
@@ -37,7 +47,7 @@ class Scoreboard:
         self.screen.blit(self.score_image,self.score_rect)
         self.screen.blit(self.high_score_image, self.high_score_rect)
         self.screen.blit(self.level_image,self.level_rect)
-
+        self.ships.draw(self.screen)
     def prep_high_score(self):
         '''Transforma a pontuação em uma imagem renderizada'''
         high_score = round(self.stats.high_score,-1)
